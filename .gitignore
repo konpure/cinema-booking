@@ -1,0 +1,8 @@
+target/
+dist/
+node_modules/
+*.log
+.env
+application-local.yml
+backend/src/main/resources/application-local.yml
+.idea/

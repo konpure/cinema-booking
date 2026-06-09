@@ -1,0 +1,96 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cinema-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: cinema
+      MYSQL_USER: cinema
+      MYSQL_PASSWORD: cinema123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: cinema-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: cinema-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend-1:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: cinema-backend-1
+    environment:
+      DB_HOST: mysql
+      DB_USER: cinema
+      DB_PASS: cinema123
+      REDIS_HOST: redis
+      RABBITMQ_HOST: rabbitmq
+      SPRING_APPLICATION_NAME: cinema-backend-1
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  backend-2:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: cinema-backend-2
+    environment:
+      DB_HOST: mysql
+      DB_USER: cinema
+      DB_PASS: cinema123
+      REDIS_HOST: redis
+      RABBITMQ_HOST: rabbitmq
+      SPRING_APPLICATION_NAME: cinema-backend-2
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.nginx
+    container_name: cinema-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend-1
+      - backend-2
+
+volumes:
+  mysql_data:

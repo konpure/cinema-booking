@@ -1,0 +1,32 @@
+【组长压缩说明 · 2026-06-08 更新】
+
+请压缩整个文件夹「cinema-booking-发给组员」发给组员。
+
+推荐方式：
+  右键文件夹 → 发送到 → 压缩(zipped)文件夹
+  或 7-Zip / WinRAR 压缩为 .zip
+
+本包已排除（无需再删）：
+  - frontend/node_modules/（组员解压后自行 npm install）
+  - backend/target/
+  - application-local.yml（含密码，每人自己创建）
+  - .idea 等 IDE 配置
+
+本包更新内容（2026-06-08）：
+  - 同步最新前后端源码
+  - 5 影城 / 10 影片 / 多场次演示数据（后端启动自动补齐）
+  - 首页按影城过滤排片、卖品加购、返回页骨架屏优化
+  - 课程架构技术对照表（用到/未用到/用在哪）
+  - 本地模式 + Docker Desktop 双启动说明
+
+组员解压后请先打开：
+  1. 【请先读我】组员入门.md
+  2. 本地运行指南-组员版.md
+  3. 课程架构技术-用到与未用到.md（答辩用）
+
+文件夹路径：
+  C:\Users\24281\IdeaProjects\software architecture\cinema-booking-发给组员
+
+压缩前可选检查：
+  - 确认 backend/src/main/resources/ 下没有 application-local.yml
+  - 确认 frontend/ 下没有 node_modules 文件夹

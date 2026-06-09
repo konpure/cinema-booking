@@ -1,0 +1,7 @@
+# Local MySQL password override (copy to application-local.yml and edit)
+# This file is optional. Default uses root with empty password.
+#
+# spring:
+#   datasource:
+#     username: root
+#     password: YOUR_MYSQL_PASSWORD

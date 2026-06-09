@@ -1,0 +1,70 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background: #0a0a0f;
+  color: #e8e6e3;
+  min-height: 100vh;
+}
+
+:root {
+  --gold: #d4a853;
+  --gold-light: #f0d78c;
+  --bg-card: #14141c;
+  --bg-hover: #1e1e2a;
+  --border: #2a2a3a;
+  --text-muted: #8a8a9a;
+  --danger: #e74c3c;
+  --success: #2ecc71;
+}
+
+a { color: var(--gold); text-decoration: none; }
+
+.page { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: var(--gold-light);
+}
+
+.el-button--primary {
+  --el-button-bg-color: var(--gold);
+  --el-button-border-color: var(--gold);
+  --el-button-hover-bg-color: var(--gold-light);
+  --el-button-hover-border-color: var(--gold-light);
+  --el-button-text-color: #0a0a0f;
+}
+
+.el-input__wrapper, .el-select__wrapper {
+  background: var(--bg-card) !important;
+  box-shadow: 0 0 0 1px var(--border) inset !important;
+}
+
+.el-card {
+  --el-card-bg-color: var(--bg-card);
+  --el-card-border-color: var(--border);
+  color: #e8e6e3;
+}
+
+.el-table {
+  --el-table-bg-color: var(--bg-card);
+  --el-table-tr-bg-color: var(--bg-card);
+  --el-table-header-bg-color: #1a1a24;
+  --el-table-border-color: var(--border);
+  --el-table-text-color: #e8e6e3;
+  --el-table-header-text-color: var(--gold-light);
+}
+
+.screen-bar {
+  text-align: center;
+  padding: 8px 40px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  color: #0a0a0f;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
