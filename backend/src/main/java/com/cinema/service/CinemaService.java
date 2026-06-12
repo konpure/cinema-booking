@@ -1,6 +1,7 @@
 package com.cinema.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.cinema.annotation.ReadOnly;
 import com.cinema.entity.Cinema;
 import com.cinema.mapper.CinemaMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,14 @@ public class CinemaService {
 
     private final CinemaMapper cinemaMapper;
 
+    @ReadOnly
     public List<Cinema> listOpen() {
         return cinemaMapper.selectList(new LambdaQueryWrapper<Cinema>()
                 .eq(Cinema::getStatus, "OPEN")
                 .orderByAsc(Cinema::getId));
     }
 
+    @ReadOnly
     public List<Cinema> listAll() {
         return cinemaMapper.selectList(new LambdaQueryWrapper<Cinema>().orderByAsc(Cinema::getId));
     }
@@ -34,6 +37,7 @@ public class CinemaService {
         return cinema;
     }
 
+    @ReadOnly
     public Cinema getById(Long id) {
         Cinema cinema = cinemaMapper.selectById(id);
         if (cinema == null) {

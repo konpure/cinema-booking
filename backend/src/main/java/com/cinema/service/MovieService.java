@@ -1,6 +1,7 @@
 package com.cinema.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.cinema.annotation.ReadOnly;
 import com.cinema.entity.Movie;
 import com.cinema.entity.Screening;
 import com.cinema.mapper.MovieMapper;
@@ -18,6 +19,7 @@ public class MovieService {
     private final MovieMapper movieMapper;
     private final ScreeningMapper screeningMapper;
 
+    @ReadOnly
     public List<Movie> listShowing(Long cinemaId) {
         if (cinemaId == null) {
             return listAllShowing();
@@ -45,12 +47,14 @@ public class MovieService {
                 .orderByDesc(Movie::getRating));
     }
 
+    @ReadOnly
     public Movie getById(Long id) {
         Movie movie = movieMapper.selectById(id);
         if (movie == null) throw new IllegalArgumentException("影片不存在");
         return movie;
     }
 
+    @ReadOnly
     public List<Movie> listAll() {
         return movieMapper.selectList(new LambdaQueryWrapper<Movie>().orderByDesc(Movie::getCreatedAt));
     }

@@ -1,6 +1,7 @@
 package com.cinema.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.cinema.annotation.ReadOnly;
 import com.cinema.entity.Screening;
 import com.cinema.mapper.ScreeningMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ public class ScreeningService {
 
     private final ScreeningMapper screeningMapper;
 
+    @ReadOnly
     public List<Screening> listByMovie(Long movieId, Long cinemaId) {
         LambdaQueryWrapper<Screening> wrapper = new LambdaQueryWrapper<Screening>()
                 .eq(Screening::getMovieId, movieId)
@@ -25,12 +27,14 @@ public class ScreeningService {
         return screeningMapper.selectList(wrapper);
     }
 
+    @ReadOnly
     public Screening getById(Long id) {
         Screening s = screeningMapper.selectById(id);
         if (s == null) throw new IllegalArgumentException("场次不存在");
         return s;
     }
 
+    @ReadOnly
     public List<Screening> listAll() {
         return screeningMapper.selectList(new LambdaQueryWrapper<Screening>().orderByAsc(Screening::getStartTime));
     }

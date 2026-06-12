@@ -1,6 +1,7 @@
 package com.cinema.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.cinema.annotation.ReadOnly;
 import com.cinema.dto.SnackOrderItem;
 import com.cinema.entity.*;
 import com.cinema.mapper.*;
@@ -99,6 +100,7 @@ public class OrderService {
         }
     }
 
+    @ReadOnly
     public List<Map<String, Object>> listUserOrders(Long userId) {
         List<Order> orders = orderMapper.selectList(new LambdaQueryWrapper<Order>()
                 .eq(Order::getUserId, userId).orderByDesc(Order::getCreatedAt));
@@ -147,6 +149,7 @@ public class OrderService {
         return result;
     }
 
+    @ReadOnly
     public Map<String, Object> dashboardStats() {
         Map<String, Object> stats = new LinkedHashMap<>();
         stats.put("totalOrders", orderMapper.selectCount(new LambdaQueryWrapper<Order>().eq(Order::getStatus, "PAID")));
@@ -157,6 +160,7 @@ public class OrderService {
         return stats;
     }
 
+    @ReadOnly
     public List<Map<String, Object>> listAllOrders() {
         List<Order> orders = orderMapper.selectList(new LambdaQueryWrapper<Order>()
                 .orderByDesc(Order::getCreatedAt).last("LIMIT 50"));

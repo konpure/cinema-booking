@@ -1,6 +1,7 @@
 package com.cinema.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.cinema.annotation.ReadOnly;
 import com.cinema.entity.Snack;
 import com.cinema.mapper.SnackMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,14 @@ public class SnackService {
 
     private final SnackMapper snackMapper;
 
+    @ReadOnly
     public List<Snack> listOnSale() {
         return snackMapper.selectList(new LambdaQueryWrapper<Snack>()
                 .eq(Snack::getStatus, "ON_SALE")
                 .orderByAsc(Snack::getCategory, Snack::getPrice));
     }
 
+    @ReadOnly
     public List<Snack> listAll() {
         return snackMapper.selectList(new LambdaQueryWrapper<Snack>().orderByAsc(Snack::getId));
     }
@@ -38,6 +41,7 @@ public class SnackService {
         snackMapper.deleteById(id);
     }
 
+    @ReadOnly
     public Snack getById(Long id) {
         Snack snack = snackMapper.selectById(id);
         if (snack == null || !"ON_SALE".equals(snack.getStatus())) {

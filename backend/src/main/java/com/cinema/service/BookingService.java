@@ -8,6 +8,7 @@ import com.cinema.entity.Order;
 import com.cinema.entity.Screening;
 import com.cinema.mapper.OrderSeatMapper;
 import com.cinema.mapper.ScreeningMapper;
+import com.cinema.kafka.OrderEventPublisher;
 import com.cinema.mq.OrderMessage;
 import com.cinema.mq.OrderNotification;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class BookingService {
     private final RedisSeatService redisSeatService;
     private final RabbitTemplate rabbitTemplate;
     private final OrderService orderService;
+    private final OrderEventPublisher orderEventPublisher;
 
     public SeatMapResponse getSeatMap(Long screeningId, Long currentUserId) {
         Screening screening = screeningMapper.selectById(screeningId);
@@ -78,6 +80,7 @@ public class BookingService {
             throw e;
         }
         publishOrderNotification(order);
+        publishKafkaOrderEvent(order, request.getSeats(), snacks);
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", order.getOrderNo());
         result.put("message", "购票成功");
@@ -121,6 +124,25 @@ public class BookingService {
             log.info("Order notification sent to RabbitMQ: {}", order.getOrderNo());
         } catch (Exception e) {
             log.warn("RabbitMQ notification failed for order {} (order already created)", order.getOrderNo(), e);
+        }
+    }
+
+    /**
+     * 板块2: 发布 Kafka 订单事件（用于事件溯源 / 异步数据分析）
+     */
+    private void publishKafkaOrderEvent(Order order, List<SeatPosition> seats, List<SnackOrderItem> snacks) {
+        try {
+            orderEventPublisher.publishOrderEvent(
+                    order.getOrderNo(),
+                    order.getUserId(),
+                    order.getScreeningId(),
+                    order.getCinemaId(),
+                    seats,
+                    snacks,
+                    order.getTotalPrice()
+            );
+        } catch (Exception e) {
+            log.warn("Kafka event publish failed for order {} (order already created)", order.getOrderNo(), e);
         }
     }
 }
