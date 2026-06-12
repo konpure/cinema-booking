@@ -52,6 +52,10 @@ cinema:
     secret: ${JWT_SECRET:cinema1234567890123456789012345678901234567890}
     expiration-ms: 86400000
   seat-lock-ttl-seconds: 600
+  zookeeper:
+    enabled: ${ZOOKEEPER_ENABLED:true}
+    connect-string: ${ZOOKEEPER_HOST:localhost}:${ZOOKEEPER_PORT:2181}
+    base-path: /cinema/instances
 
 logging:
   level:

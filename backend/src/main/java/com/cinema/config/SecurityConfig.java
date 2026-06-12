@@ -40,7 +40,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jsonAuthEntryPoint)
                         .accessDeniedHandler(jsonAccessDeniedHandler))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/auth/register", "/actuator/**", "/api/health").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/register", "/actuator/**",
+                                "/api/health", "/api/zookeeper/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/movies/**", "/api/screenings/**",
                                 "/api/cinemas/**", "/api/snacks").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
