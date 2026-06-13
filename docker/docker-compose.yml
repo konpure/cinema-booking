@@ -3,10 +3,10 @@ services:
     image: mysql:8.0
     container_name: cinema-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_ROOT_PASSWORD: ***
       MYSQL_DATABASE: cinema
       MYSQL_USER: cinema
-      MYSQL_PASSWORD: cinema123
+      MYSQL_PASSWORD: ***
     ports:
       - "3306:3306"
     volumes:
@@ -52,6 +52,23 @@ services:
       timeout: 5s
       retries: 5
 
+  # ===== 板块8: Nacos 注册中心 =====
+  nacos:
+    image: nacos/nacos-server:v2.3.2
+    container_name: cinema-nacos
+    environment:
+      MODE: standalone
+      JVM_XMS: 256m
+      JVM_XMX: 512m
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:8848/nacos/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
   backend-1:
     build:
       context: ../backend
@@ -64,6 +81,8 @@ services:
       REDIS_HOST: redis
       RABBITMQ_HOST: rabbitmq
       ZOOKEEPER_HOST: zookeeper
+      NACOS_HOST: nacos
+      NACOS_PORT: 8848
       SPRING_APPLICATION_NAME: cinema-backend-1
       LOGSTASH_HOST: logstash
       LOGSTASH_PORT: 5044
@@ -75,6 +94,8 @@ services:
       rabbitmq:
         condition: service_healthy
       zookeeper:
+        condition: service_healthy
+      nacos:
         condition: service_healthy
       logstash:
         condition: service_started
@@ -91,6 +112,8 @@ services:
       REDIS_HOST: redis
       RABBITMQ_HOST: rabbitmq
       ZOOKEEPER_HOST: zookeeper
+      NACOS_HOST: nacos
+      NACOS_PORT: 8848
       SPRING_APPLICATION_NAME: cinema-backend-2
       LOGSTASH_HOST: logstash
       LOGSTASH_PORT: 5044
@@ -102,6 +125,8 @@ services:
       rabbitmq:
         condition: service_healthy
       zookeeper:
+        condition: service_healthy
+      nacos:
         condition: service_healthy
       logstash:
         condition: service_started
@@ -117,7 +142,7 @@ services:
       - backend-1
       - backend-2
 
-  # ===== ???7: ???????=====
+  # ===== 板块7: 可观测性 =====
 
   elasticsearch:
     image: elasticsearch:7.17.24
@@ -125,7 +150,7 @@ services:
     environment:
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
-      - ELASTIC_PASSWORD=cinema123
+      - ELASTIC_PASSWORD=***
       - xpack.security.enabled=false
       - xpack.security.enrollment.enabled=false
     ports:
@@ -162,7 +187,7 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - ELASTICSEARCH_USERNAME=elastic
-      - ELASTICSEARCH_PASSWORD=cinema123
+      - ELASTICSEARCH_PASSWORD=***
     ports:
       - "5601:5601"
     depends_on:

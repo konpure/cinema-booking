@@ -1,6 +1,5 @@
 server:
   port: 8080
-
 spring:
   application:
     name: cinema-booking
@@ -36,27 +35,28 @@ spring:
           enabled: true
           max-attempts: 3
           initial-interval: 2000ms
-  # ???2: Kafka ?????????????????????
   kafka:
     bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
-
+  cloud:
+    nacos:
+      discovery:
+        enabled: false
+        server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
   global-config:
     db-config:
       id-type: auto
-
 cinema:
   jwt:
-    secret: ${JWT_SECRET:cinemaSecretKeyForJWTToken256Bits!!}
+    secret: ${JWT_SECRET:cinemaBookingSecretKey2024SuperSecure256Bit!}
     expiration-ms: 86400000
   seat-lock-ttl-seconds: 600
   zookeeper:
     enabled: ${ZOOKEEPER_ENABLED:true}
     connect-string: ${ZOOKEEPER_HOST:localhost}:${ZOOKEEPER_PORT:2181}
     base-path: /cinema/instances
-
 logging:
   file:
     path: /home/cinema/cinema-booking/logs
@@ -65,12 +65,9 @@ logging:
     org.springframework.security: WARN
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-
-# ===== ???7: ???????=====
 logstash:
   host: ${LOGSTASH_HOST:localhost}
   port: ${LOGSTASH_PORT:5044}
-
 management:
   endpoints:
     web:
