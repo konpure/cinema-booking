@@ -65,6 +65,8 @@ services:
       RABBITMQ_HOST: rabbitmq
       ZOOKEEPER_HOST: zookeeper
       SPRING_APPLICATION_NAME: cinema-backend-1
+      LOGSTASH_HOST: logstash
+      LOGSTASH_PORT: 5044
     depends_on:
       mysql:
         condition: service_healthy
@@ -74,6 +76,8 @@ services:
         condition: service_healthy
       zookeeper:
         condition: service_healthy
+      logstash:
+        condition: service_started
 
   backend-2:
     build:
@@ -88,6 +92,8 @@ services:
       RABBITMQ_HOST: rabbitmq
       ZOOKEEPER_HOST: zookeeper
       SPRING_APPLICATION_NAME: cinema-backend-2
+      LOGSTASH_HOST: logstash
+      LOGSTASH_PORT: 5044
     depends_on:
       mysql:
         condition: service_healthy
@@ -97,6 +103,8 @@ services:
         condition: service_healthy
       zookeeper:
         condition: service_healthy
+      logstash:
+        condition: service_started
 
   nginx:
     build:
@@ -109,5 +117,77 @@ services:
       - backend-1
       - backend-2
 
+  # ===== ???7: ???????=====
+
+  elasticsearch:
+    image: elasticsearch:7.17.24
+    container_name: cinema-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ELASTIC_PASSWORD=cinema123
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"\\|\"status\":\"yellow\"'"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+
+  logstash:
+    image: logstash:7.17.24
+    container_name: cinema-logstash
+    environment:
+      - LS_JAVA_OPTS=-Xms256m -Xmx256m
+      - ES_HOST=elasticsearch
+      - ES_PORT=9200
+      - ES_USER=elastic
+      - ES_PASS=cinema123
+    ports:
+      - "5044:5044"
+    volumes:
+      - ./logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  kibana:
+    image: kibana:7.17.24
+    container_name: cinema-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=cinema123
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: cinema-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    depends_on:
+      - backend-1
+      - backend-2
+
 volumes:
   mysql_data:
+  es_data:
+  prometheus_data:

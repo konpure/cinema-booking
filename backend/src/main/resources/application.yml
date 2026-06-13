@@ -36,7 +36,7 @@ spring:
           enabled: true
           max-attempts: 3
           initial-interval: 2000ms
-  # 板块2: Kafka 配置（懒加载，不装也能启动）
+  # ???2: Kafka ?????????????????????
   kafka:
     bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
 
@@ -49,7 +49,7 @@ mybatis-plus:
 
 cinema:
   jwt:
-    secret: ${JWT_SECRET:cinema1234567890123456789012345678901234567890}
+    secret: ${JWT_SECRET:cinemaSecretKeyForJWTToken256Bits!!}
     expiration-ms: 86400000
   seat-lock-ttl-seconds: 600
   zookeeper:
@@ -58,17 +58,29 @@ cinema:
     base-path: /cinema/instances
 
 logging:
+  file:
+    path: /home/cinema/cinema-booking/logs
   level:
     com.cinema: INFO
     org.springframework.security: WARN
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
+# ===== ???7: ???????=====
+logstash:
+  host: ${LOGSTASH_HOST:localhost}
+  port: ${LOGSTASH_PORT:5044}
+
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,prometheus
   endpoint:
     health:
       show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}

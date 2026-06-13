@@ -21,6 +21,7 @@
         <java.version>17</java.version>
         <mybatis-plus.version>3.5.6</mybatis-plus.version>
         <jjwt.version>0.12.5</jjwt.version>
+        <logstash-encoder.version>8.0</logstash-encoder.version>
     </properties>
 
     <dependencies>
@@ -91,28 +92,54 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- 板块2: Kafka 事件流 -->
+        <!-- ???2: Kafka ?????-->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
 
-        <!-- 板块2: 读写分离 AOP -->
+        <!-- ???2: ?????? AOP -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
-        <!-- 板块3: ZooKeeper 服务注册与协调 -->
+        <!-- ???3: ZooKeeper ???????????-->
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-recipes</artifactId>
             <version>5.7.1</version>
         </dependency>
+
+        <!-- ===== ???7: ???????===== -->
+
+        <!-- 7-1: Micrometer Prometheus ?????- ??? /actuator/prometheus -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <!-- 7-2: Logstash Logback ?????- JSON ???????????Logstash/ES -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-encoder.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- ??? surefire ???????????? Maven ????????? -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
