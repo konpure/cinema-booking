@@ -74,6 +74,8 @@ services:
       context: ../backend
       dockerfile: Dockerfile
     container_name: cinema-backend-1
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       DB_HOST: mysql
       DB_USER: cinema
@@ -86,6 +88,7 @@ services:
       SPRING_APPLICATION_NAME: cinema-backend-1
       LOGSTASH_HOST: logstash
       LOGSTASH_PORT: 5044
+      SPRING_CLOUD_SENTINEL_TRANSPORT_DASHBOARD: host.docker.internal:8858
     depends_on:
       mysql:
         condition: service_healthy
@@ -99,12 +102,20 @@ services:
         condition: service_healthy
       logstash:
         condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   backend-2:
     build:
       context: ../backend
       dockerfile: Dockerfile
     container_name: cinema-backend-2
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       DB_HOST: mysql
       DB_USER: cinema
@@ -117,6 +128,7 @@ services:
       SPRING_APPLICATION_NAME: cinema-backend-2
       LOGSTASH_HOST: logstash
       LOGSTASH_PORT: 5044
+      SPRING_CLOUD_SENTINEL_TRANSPORT_DASHBOARD: host.docker.internal:8858
     depends_on:
       mysql:
         condition: service_healthy
@@ -130,6 +142,12 @@ services:
         condition: service_healthy
       logstash:
         condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   nginx:
     build:

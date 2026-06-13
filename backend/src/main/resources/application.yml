@@ -42,6 +42,11 @@ spring:
       discovery:
         enabled: false
         server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
+    sentinel:
+      eager: true
+      transport:
+        port: 8719
+        dashboard: localhost:8858
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
