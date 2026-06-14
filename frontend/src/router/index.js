@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
-import MovieDetail from '../views/MovieDetail.vue'
-import Booking from '../views/Booking.vue'
-import Orders from '../views/Orders.vue'
-import Admin from '../views/Admin.vue'
+
+const Home = () => import('../views/Home.vue')
+const Login = () => import('../views/Login.vue')
+const MovieDetail = () => import('../views/MovieDetail.vue')
+const Booking = () => import('../views/Booking.vue')
+const Orders = () => import('../views/Orders.vue')
+const Admin = () => import('../views/Admin.vue')
 
 const router = createRouter({
   history: createWebHistory(),

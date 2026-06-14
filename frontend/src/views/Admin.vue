@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="page admin">
     <div class="admin-head">
       <h2 class="section-title">管理后台</h2>
@@ -9,7 +9,7 @@
       <el-col :span="6"><el-card shadow="never"><div class="stat-num">{{ stats.totalOrders || 0 }}</div><div class="stat-label">总订单</div></el-card></el-col>
       <el-col :span="6"><el-card shadow="never"><div class="stat-num">{{ stats.totalUsers || 0 }}</div><div class="stat-label">用户数</div></el-card></el-col>
       <el-col :span="6"><el-card shadow="never"><div class="stat-num">{{ stats.totalMovies || 0 }}</div><div class="stat-label">在映影片</div></el-card></el-col>
-      <el-col :span="6"><el-card shadow="never"><div class="stat-num gold">9</div><div class="stat-label">架构技术已集成</div></el-card></el-col>
+      <el-col :span="6"><el-card shadow="never"><div class="stat-num gold">27</div><div class="stat-label">架构技术已集成</div></el-card></el-col>
     </el-row>
 
     <el-row :gutter="20" class="chart-row">
@@ -115,6 +115,57 @@
             <template #default="{ row }">{{ formatTime(row.createdAt) }}</template>
           </el-table-column>
         </el-table>
+      </el-tab-pane>
+          <el-tab-pane label="架构技术" name="tech">
+        <div class="tech-container">
+          <p class="tech-summary">本项目共集成 <strong>27</strong> 种技术栈，覆盖 9 大板块，各板块技术及说明如下：</p>
+          <h4 class="tech-section-title">板块1 — 安全认证</h4>
+          <el-table :data="techSec1" style="margin-bottom:20px">
+            <el-table-column prop="name" label="技术" width="200" />
+            <el-table-column prop="desc" label="说明" />
+          </el-table>
+          <h4 class="tech-section-title">板块2 — 数据层</h4>
+          <el-table :data="techSec2" style="margin-bottom:20px">
+            <el-table-column prop="name" label="技术" width="200" />
+            <el-table-column prop="desc" label="说明" />
+          </el-table>
+          <h4 class="tech-section-title">板块3 — 消息队列</h4>
+          <el-table :data="techSec3" style="margin-bottom:20px">
+            <el-table-column prop="name" label="技术" width="200" />
+            <el-table-column prop="desc" label="说明" />
+          </el-table>
+          <h4 class="tech-section-title">板块4 — 网关高可用</h4>
+          <el-table :data="techSec4" style="margin-bottom:20px">
+            <el-table-column prop="name" label="技术" width="200" />
+            <el-table-column prop="desc" label="说明" />
+          </el-table>
+          <h4 class="tech-section-title">板块5 — 容器化</h4>
+          <el-table :data="techSec5" style="margin-bottom:20px">
+            <el-table-column prop="name" label="技术" width="200" />
+            <el-table-column prop="desc" label="说明" />
+          </el-table>
+          <h4 class="tech-section-title">板块6 — 前端技术</h4>
+          <el-table :data="techSec6" style="margin-bottom:20px">
+            <el-table-column prop="name" label="技术" width="200" />
+            <el-table-column prop="desc" label="说明" />
+          </el-table>
+          <h4 class="tech-section-title">板块7 — 可观测性</h4>
+          <el-table :data="techSec7" style="margin-bottom:20px">
+            <el-table-column prop="name" label="技术" width="200" />
+            <el-table-column prop="desc" label="说明" />
+          </el-table>
+          <h4 class="tech-section-title">板块8 — 服务治理</h4>
+          <el-table :data="techSec8" style="margin-bottom:20px">
+            <el-table-column prop="name" label="技术" width="200" />
+            <el-table-column prop="desc" label="说明" />
+          </el-table>
+          <h4 class="tech-section-title">板块9 — 工程化</h4>
+          <el-table :data="techSec9" style="margin-bottom:20px">
+            <el-table-column prop="name" label="技术" width="200" />
+            <el-table-column prop="desc" label="说明" />
+          </el-table>
+        </div>
+
       </el-tab-pane>
     </el-tabs>
 
@@ -243,6 +294,53 @@ const screeningForm = reactive({ id: null, movieId: null, cinemaId: null, hallNa
 const snackForm = reactive({ id: null, name: '', category: 'SINGLE', price: 28, description: '', image: '', status: 'ON_SALE' })
 const cinemaForm = reactive({ id: null, name: '', city: '北京', address: '', phone: '', cover: '', status: 'OPEN' })
 
+
+// === 架构技术 27种 ===
+const techSec1 = [
+  { name: 'Spring Security', desc: '登录认证、角色授权与URL级权限控制' },
+  { name: '拦截器（Interceptor）', desc: '请求日志记录、跨域处理与接口权限校验' },
+  { name: 'JWT', desc: 'JJWT签发与验证Token，无状态认证与自定义载荷' },
+]
+const techSec2 = [
+  { name: 'Redis', desc: '缓存座位锁定、用户Session，支持持久化与过期策略' },
+  { name: '读写分离（MySQL）', desc: '一主一从架构，写主库读从库，提升并发读性能' },
+  { name: 'Kafka', desc: '订单消息异步推送，实现创建与通知解耦' },
+]
+const techSec3 = [
+  { name: 'ZooKeeper', desc: '分布式协调服务，管理RabbitMQ集群元数据' },
+  { name: 'RabbitMQ', desc: '订单超时取消、异步通知，支持延迟队列' },
+  { name: 'HighCharts', desc: '管理后台展示消息吞吐量、队列积压监控图' },
+]
+const techSec4 = [
+  { name: 'Nginx', desc: '反向代理后端，静态缓存、HTTPS终止与请求限流' },
+  { name: '负载均衡', desc: 'Nginx upstream多节点轮询，提升系统可用性' },
+  { name: 'Sentinel', desc: 'Dashboard监控接口流量，熔断降级与限流规则' },
+]
+const techSec5 = [
+  { name: 'Docker', desc: '容器化部署各服务，统一运行环境简化运维' },
+  { name: 'K8s（Kubernetes）', desc: '编排容器集群，自动扩缩容与服务发现' },
+  { name: 'HybridFlask', desc: '混合Python/Flask辅助监控，对接Prometheus' },
+]
+const techSec6 = [
+  { name: 'Vue 3', desc: 'Composition API构建SPA，路由守卫控制页面访问' },
+  { name: 'ECharts', desc: '集票房柱状图与热门影片饼图，响应式更新' },
+  { name: 'Memcached', desc: '仅K-V缓存、无持久化，适合高吞吐只读场景（对比分析）' },
+]
+const techSec7 = [
+  { name: 'SLF4J / Logback', desc: '统一日志门面，按天滚动归档，MDC追踪请求链路' },
+  { name: 'Elasticsearch', desc: '集中存储日志，全文检索与聚合分析快速定位问题' },
+  { name: 'Prometheus', desc: '采集JVM指标、QPS响应时间，Grafana可视化面板' },
+]
+const techSec8 = [
+  { name: 'Nacos', desc: '注册中心与配置管理，服务动态发现与配置热更新' },
+  { name: 'Actuator', desc: '健康检查与指标端点，对接Prometheus监控系统' },
+  { name: 'Docker Compose', desc: '编排多容器服务依赖，一键启动开发环境' },
+]
+const techSec9 = [
+  { name: 'MyBatis-Plus', desc: '代码生成器自动生成Mapper，Lambda条件构造器简化SQL' },
+  { name: 'JUnit', desc: 'Service层单元测试集成测试，覆盖核心业务逻辑' },
+  { name: 'Spring Boot', desc: '项目基础框架，自动配置简化开发，提供RESTful API' },
+]
 onMounted(loadAll)
 onUnmounted(() => {
   revenueChartInst?.dispose()
@@ -264,7 +362,7 @@ async function loadAll() {
     cinemas.value = cRes.data || []
     orders.value = oRes.data || []
     await nextTick()
-    setTimeout(renderCharts, 100)
+    renderCharts()
   } catch (e) {
     ElMessage.error(e.message || '加载管理数据失败')
   } finally {
@@ -295,14 +393,32 @@ function renderRevenueChart() {
   if (!revenueChartRef.value) return
   revenueChartInst?.dispose()
   revenueChartInst = echarts.init(revenueChartRef.value)
+  // loading animation
+  revenueChartInst.showLoading({
+    text: '加载中...',
+    color: '#d4a853',
+    textColor: '#8a8a9a',
+    maskColor: 'rgba(20,20,28,0.8)'
+  })
   const raw = stats.value.revenueByDay || []
+  if (!raw.length) {
+    revenueChartInst.hideLoading()
+    revenueChartInst.setOption({
+      backgroundColor: 'transparent',
+      title: { text: '近7日票房', textStyle: { color: '#d4a853', fontSize: 14 } },
+      graphic: [{
+        type: 'text',
+        left: 'center',
+        top: 'middle',
+        style: { text: '暂无票房数据\n完成购票后即可显示', fill: '#8a8a9a', fontSize: 14, textAlign: 'center' }
+      }]
+    })
+    return
+  }
   const data = [...raw].reverse()
-  const dates = data.length
-    ? data.map(d => String(pickField(d, 'date', 'DATE') || ''))
-    : ['暂无']
-  const values = data.length
-    ? data.map(d => Number(pickField(d, 'revenue', 'REVENUE') || 0))
-    : [0]
+  const dates = data.map(d => String(pickField(d, 'date', 'DATE') || ''))
+  const values = data.map(d => Number(pickField(d, 'revenue', 'REVENUE') || 0))
+  revenueChartInst.hideLoading()
   revenueChartInst.setOption({
     backgroundColor: 'transparent',
     title: { text: '近7日票房', textStyle: { color: '#d4a853', fontSize: 14 } },
@@ -319,13 +435,33 @@ function renderMovieChart() {
   if (!movieChartRef.value) return
   movieChartInst?.dispose()
   movieChartInst = echarts.init(movieChartRef.value)
+  // loading animation
+  movieChartInst.showLoading({
+    text: '加载中...',
+    color: '#d4a853',
+    textColor: '#8a8a9a',
+    maskColor: 'rgba(20,20,28,0.8)'
+  })
   const raw = stats.value.topMovies || []
-  const pieData = raw.length
-    ? raw.map(d => ({
-        name: pickField(d, 'title', 'TITLE') || '未知',
-        value: Number(pickField(d, 'revenue', 'REVENUE') || 0)
-      }))
-    : [{ name: '暂无订单数据', value: 1, itemStyle: { color: '#444' } }]
+  if (!raw.length) {
+    movieChartInst.hideLoading()
+    movieChartInst.setOption({
+      backgroundColor: 'transparent',
+      title: { text: '热门影片 TOP5', textStyle: { color: '#d4a853', fontSize: 14 } },
+      graphic: [{
+        type: 'text',
+        left: 'center',
+        top: 'middle',
+        style: { text: '暂无订单数据\n完成购票后即可查看', fill: '#8a8a9a', fontSize: 14, textAlign: 'center' }
+      }]
+    })
+    return
+  }
+  const pieData = raw.map(d => ({
+    name: pickField(d, 'title', 'TITLE') || '未知',
+    value: Number(pickField(d, 'revenue', 'REVENUE') || 0)
+  }))
+  movieChartInst.hideLoading()
   movieChartInst.setOption({
     backgroundColor: 'transparent',
     title: { text: '热门影片 TOP5', textStyle: { color: '#d4a853', fontSize: 14 } },
@@ -446,7 +582,7 @@ async function saveCinema() {
 }
 
 async function delMovie(row) {
-  await ElMessageBox.confirm(`确定删除影片「${row.title}」？`, '确认删除', { type: 'warning' })
+  await ElMessageBox.confirm('确定删除影片：' + row.title + '？', '确认删除', { type: 'warning' })
   try {
     await adminApi.deleteMovie(row.id)
     ElMessage.success('已删除')
@@ -457,7 +593,7 @@ async function delMovie(row) {
 }
 
 async function delScreening(row) {
-  await ElMessageBox.confirm(`确定删除场次「${row.hallName}」？`, '确认删除', { type: 'warning' })
+  await ElMessageBox.confirm('确定删除场次：' + row.hallName + '？', '确认删除', { type: 'warning' })
   try {
     await adminApi.deleteScreening(row.id)
     ElMessage.success('已删除')
@@ -468,7 +604,7 @@ async function delScreening(row) {
 }
 
 async function delSnack(row) {
-  await ElMessageBox.confirm(`确定删除卖品「${row.name}」？`, '确认删除', { type: 'warning' })
+  await ElMessageBox.confirm('确定删除卖品：' + row.name + '？', '确认删除', { type: 'warning' })
   try {
     await adminApi.deleteSnack(row.id)
     ElMessage.success('已删除')
@@ -488,4 +624,10 @@ async function delSnack(row) {
 .chart { height: 320px; width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; }
 .admin-tabs { margin-top: 32px; }
 .tab-toolbar { margin-bottom: 12px; }
+
+/* 架构技术 tab */
+.tech-container { padding: 8px 0; }
+.tech-summary { color: var(--gold-light); margin-bottom: 24px; font-size: 15px; }
+.tech-summary strong { color: var(--gold); font-size: 1.2rem; }
+.tech-section-title { color: var(--gold); margin: 16px 0 10px; font-size: 1rem; font-weight: 500; border-left: 3px solid var(--gold); padding-left: 10px; }
 </style>

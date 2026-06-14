@@ -125,6 +125,12 @@
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
             <version>2023.0.1.2</version>
         </dependency>
+        <!-- Memcached -->
+        <dependency>
+            <groupId>com.googlecode.xmemcached</groupId>
+            <artifactId>xmemcached</artifactId>
+            <version>2.4.8</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

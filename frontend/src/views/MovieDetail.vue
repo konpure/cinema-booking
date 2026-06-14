@@ -1,7 +1,12 @@
 <template>
   <div class="page" v-if="movie">
+    <div class="detail-topbar">
+      <el-button text size="small" @click="$router.push('/')">
+        <el-icon><ArrowLeft /></el-icon> 返回首页
+      </el-button>
+    </div>
     <div class="detail-header">
-      <img :src="movie.poster" class="poster" />
+      <img v-fallback :src="movie.poster" class="poster" />
       <div class="meta">
         <h1>{{ movie.title }}</h1>
         <div class="tags">
@@ -45,7 +50,7 @@
 defineOptions({ name: 'MovieDetail' })
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { Location } from '@element-plus/icons-vue'
+import { Location, ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { movieApi, screeningApi, cinemaApi } from '../api'
 import { getCinemaIdParam } from '../composables/useCinema'
@@ -130,4 +135,6 @@ function formatDate(t) {
 .format-tag { color: var(--text-muted); font-size: 13px; min-width: 80px; }
 .price { font-size: 1.4rem; color: var(--gold); font-weight: 700; min-width: 90px; }
 .price span { font-size: 12px; font-weight: 400; color: var(--text-muted); }
+.detail-topbar { margin-bottom: 16px; }
+.detail-topbar .el-button { color: var(--gold); }
 </style>

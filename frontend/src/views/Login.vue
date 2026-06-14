@@ -1,13 +1,13 @@
-<template>
+﻿<template>
   <div class="page login-page">
     <div class="login-card">
       <h2>{{ isRegister ? '注册账号' : '欢迎回来' }}</h2>
       <p class="subtitle">登录后即可选座购票</p>
-      <el-form @submit.prevent="submit">
-        <el-form-item>
+      <el-form ref="formRef" :rules="rules" :model="form" @submit.prevent="submit">
+        <el-form-item prop="username">
           <el-input v-model="form.username" placeholder="用户名" size="large" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input v-model="form.password" type="password" placeholder="密码" size="large" show-password />
         </el-form-item>
         <el-button type="primary" size="large" style="width:100%" :loading="loading" native-type="submit">
@@ -37,8 +37,26 @@ const router = useRouter()
 const isRegister = ref(false)
 const loading = ref(false)
 const form = reactive({ username: '', password: '' })
+const formRef = ref(null)
+
+const rules = {
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 2, max: 20, message: '用户名长度 2-20 位', trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 4, max: 20, message: '密码长度 4-20 位', trigger: 'blur' }
+  ]
+}
 
 async function submit() {
+  if (!formRef.value) return
+  try {
+    await formRef.value.validate()
+  } catch {
+    return
+  }
   loading.value = true
   try {
     const fn = isRegister.value ? authApi.register : authApi.login

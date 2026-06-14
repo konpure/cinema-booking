@@ -86,3 +86,8 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+
+# Memcached
+memcached:
+  host: 127.0.0.1
+  port: 11211
