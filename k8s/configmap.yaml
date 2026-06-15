@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cinema-config
+  namespace: cinema
+data:
+  DB_HOST: mysql-svc
+  DB_PORT: "3306"
+  DB_USER: cinema
+  REDIS_HOST: redis-svc
+  REDIS_PORT: "6379"
+  RABBITMQ_HOST: rabbitmq-svc
+  RABBITMQ_PORT: "5672"
+  RABBITMQ_USER: guest
+  ZOOKEEPER_HOST: zookeeper-svc
+  ZOOKEEPER_PORT: "2181"
+  NACOS_HOST: nacos-svc
+  NACOS_PORT: "8848"
+  LOGSTASH_HOST: logstash-svc
+  LOGSTASH_PORT: "5044"
+  KAFKA_HOST: kafka-svc
+  KAFKA_PORT: "9092"
+  SPRING_APPLICATION_NAME: cinema-booking
+  JWT_SECRET: cinema…Bit!
+  TZ: Asia/Shanghai

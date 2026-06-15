@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+  namespace: cinema
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: cinema-backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-1
+  namespace: cinema
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cinema-backend
+      instance: backend-1
+  template:
+    metadata:
+      labels:
+        app: cinema-backend
+        instance: backend-1
+    spec:
+      containers:
+      - name: backend
+        image: cinema/backend:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cinema-config
+        env:
+        - name: SPRING_APPLICATION_NAME
+          value: cinema-backend-1
+        - name: DB_PASS
+          value: "cinema123"
+        - name: RABBITMQ_PASS
+          value: "guest"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-2
+  namespace: cinema
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cinema-backend
+      instance: backend-2
+  template:
+    metadata:
+      labels:
+        app: cinema-backend
+        instance: backend-2
+    spec:
+      containers:
+      - name: backend
+        image: cinema/backend:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cinema-config
+        env:
+        - name: SPRING_APPLICATION_NAME
+          value: cinema-backend-2
+        - name: DB_PASS
+          value: "cinema123"
+        - name: RABBITMQ_PASS
+          value: "guest"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5

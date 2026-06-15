@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+  namespace: cinema
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080
+  selector:
+    app: cinema-nginx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: cinema
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cinema-nginx
+  template:
+    metadata:
+      labels:
+        app: cinema-nginx
+    spec:
+      containers:
+      - name: nginx
+        image: cinema/nginx-gateway:latest
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10

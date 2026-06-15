@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nacos-svc
+  namespace: cinema
+spec:
+  ports:
+  - name: client
+    port: 8848
+    targetPort: 8848
+  - name: rpc
+    port: 9848
+    targetPort: 9848
+  selector:
+    app: nacos
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nacos
+  namespace: cinema
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nacos
+  template:
+    metadata:
+      labels:
+        app: nacos
+    spec:
+      containers:
+      - name: nacos
+        image: nacos/nacos-server:v2.3.2
+        ports:
+        - containerPort: 8848
+        - containerPort: 9848
+        env:
+        - name: MODE
+          value: standalone
+        - name: JVM_XMS
+          value: 256m
+        - name: JVM_XMX
+          value: 512m
+        livenessProbe:
+          httpGet:
+            path: /nacos/actuator/health
+            port: 8848
+          initialDelaySeconds: 30
+          periodSeconds: 15
