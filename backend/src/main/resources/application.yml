@@ -40,7 +40,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        enabled: false
+        enabled: true
         server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
     sentinel:
       eager: true
